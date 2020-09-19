@@ -1,8 +1,8 @@
 
 # Factorio Headless Server Ansible Playbook
-I created this because I wanted some experience with Ansible and the other Factorio based Ansible repositories I found were for  a much more policed role where you could create your own pla>
+I created this because I wanted some experience with Ansible and the other Factorio based Ansible repositories I found were for roles for a more polished and automation-based approach (as you should with Ansible)
 
-Mine is much more of a 'quick and dirty' download and setup factorio
+Mine is much more of a 'quick and dirty' configuring on factorio to get a server up and running quick and (hopefully) easily
 
 Once finished you will have the latest version of a factorio headless linux server located in /opt/factorio and a cronjob that runs the backup.sh every 4 hours. That backup.sh will backup your saves directory to the bak folder. This is because if your base has an issue for more than an hour or so and you don't notice it, all your autosaves could be overwritten if it's left to run.
 
@@ -10,7 +10,7 @@ Once finished you will have the latest version of a factorio headless linux serv
 
 ## Install
 You could copy this playbook to your Ansible server and serve this playbook to any machine you want but anyone who already has an Ansible server will know how to deploy this file that way.
-If you are like me then you want a quick way to deploy this standalone on one specific server (yes this defeats the purpose of Ansible, but I wanted the experience) so I will give instructi>
+If you are like me then you want a quick way to deploy this standalone on one specific server (yes this defeats the purpose of Ansible, but I wanted the experience) so I will give instructions for how to do this on one machine quickly to setup factorio
 
 ### 1. Install Ansible and add host 
 * Install any Linux distro that uses apt-get, probably Ubuntu server
