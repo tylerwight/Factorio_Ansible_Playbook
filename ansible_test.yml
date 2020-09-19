@@ -1,0 +1,80 @@
+---
+- name: Install Factorio
+  hosts: gameserver
+  become: true
+  become_user: root
+  tasks:
+          - name: Install tmux 
+            apt:
+                    name: tmux
+                    state: latest
+          - name: mkdir factorio
+            file:
+                    path: /opt/factorio
+                    state: directory
+                    owner: user
+                    group: user
+                    mode: 0775
+          - name: download factorio
+            get_url:
+                    url: https://factorio.com/get-download/latest/headless/linux64
+                    dest: /opt/factorio/factorio_headless.tar.xz
+                    owner: user
+                    group: user
+                    mode: 0665
+          - name: extract factorio
+            unarchive:
+                    src: /opt/factorio/factorio_headless.tar.xz
+                    dest: /opt
+                    owner: user
+                    group: user
+                    mode: 0775
+                    remote_src: yes
+          - name: copy start script
+            copy:
+                    src: start_server.sh
+                    dest: /opt/factorio/start_server.sh
+                    owner: user
+                    group: user
+                    mode: 0775
+
+          - name: copy backup script
+            copy:
+                    src: backup.sh
+                    dest: /opt/factorio/backup.sh
+                    owner: user
+                    group: user
+                    mode: 0775
+          - name: copy map gen settings
+            copy:
+                    src: map-gen-settings.json
+                    dest: /opt/factorio/data/map-gen-settings.json
+                    owner: user
+                    group: user
+                    mode: 0665
+          - name: copy gen new map script
+            copy:
+                    src: genmap.sh
+                    dest: /opt/factorio/genmap.sh
+                    owner: root
+                    group: root
+                    mode: 0775
+          - name: copy server-settings.json
+            copy:
+                    src: server-settings.json
+                    dest: /opt/factorio/data/server-settings.json
+                    owner: user
+                    group: user
+                    mode: 0665
+          - name: add backup cron
+            cron:
+                    name: factorio backup
+                    minute: "0"
+                    hour: "*/4"
+                    job: "/opt/factorio/backup.sh > /dev/null"
+          - name: genmap
+            shell: '/opt/factorio/genmap.sh'
+          - name: run server
+            shell: tmux new-session -d -s factorio '/opt/factorio/start_server.sh'
+          - name: test
+            shell: 'whoami > ~/test.file'
